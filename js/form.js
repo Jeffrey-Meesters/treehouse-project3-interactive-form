@@ -114,7 +114,11 @@ const checkboxChange = () => {
 
     // if js-frameworks then express needs to be disabled and vice versa 
     if ($.inArray('js-frameworks', arrayOfCheckedBoxes) > -1 ) {
+
+        // how to select with name values: https://www.w3schools.com/jquery/sel_attribute_contains_value.asp
         $("input[name~='express']").attr('disabled', true)
+        // set the parents (label) class to disabled as I found out that the disabled attribute does not work on labels
+        // I needed to use a class, both disabled states are styled in style.css
         $("input[name~='express']").parent().attr('class', 'disabled')
     } else {
         $("input[name~='express']").attr('disabled', false)
