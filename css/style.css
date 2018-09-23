@@ -76,6 +76,10 @@ label {
 	margin-bottom: .5em;
 }
 
+label.disabled {
+	color: darkslategrey;
+}
+
 input,
 select {
 	margin-bottom: 1.125em;	
@@ -99,6 +103,10 @@ input:focus {
 input[type="checkbox"],
 input[type="radio"] {
 	display: inline-block;
+}
+
+input[type="checkbox"]:disabled {
+	color: darkslategrey;
 }
 
 button {
