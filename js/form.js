@@ -23,6 +23,8 @@ const designChange = (e) => {
         for(let i = 0; i < options.length; i += 1) {
             // the first 3 are puns so show them now
             if (i <= 2) {
+                $(options[0]).attr('selected', true)
+                $(options[3]).attr('selected', false)
                 $(options[i]).show()
             // the last 3 are hearts so hide them now 
             } else {
@@ -35,12 +37,46 @@ const designChange = (e) => {
         for(let i = 0; i < options.length; i += 1) {
             // the last 3 are hearts so show them now
             if (i > 2) {
+                $(options[3]).attr('selected', true)
+                $(options[0]).attr('selected', false)
                 $(options[i]).show()
             // the first 3 are puns so hide them now
             } else {
                 $(options[i]).hide()
             }
         }
+    }
+}
+
+const paymentSelect = (e) => {
+    const targetValue = e.target.value
+    const $creditCardInfo = $('#credit-card')
+    const $paypalinfo = $('#credit-card').next()
+    const $btcInfo = $('#credit-card').next().next().hide()
+    console.log(e.target.value)
+
+    if (targetValue === 'select_method') {
+        $creditCardInfo.hide()
+        $paypalinfo.hide()
+        $btcInfo.hide()
+    }
+
+    if (targetValue === 'credit card') {
+        $creditCardInfo.show()
+        $paypalinfo.hide()
+        $btcInfo.hide()
+    }
+
+    if (targetValue === 'paypal') {
+        $creditCardInfo.hide()
+        $paypalinfo.show()
+        $btcInfo.hide()
+    }
+    
+    if (targetValue === 'bitcoin') {
+        $creditCardInfo.hide()
+        $paypalinfo.hide()
+        $btcInfo.show()
     }
 }
 
@@ -58,5 +94,10 @@ const designChange = (e) => {
     $('#title').on('change', jobRoleChange)
     // when the t-shirt design select changes call designChange function
     $('#design').on('change', designChange)
+    $('#payment').on('change', paymentSelect)
+
+    $('#credit-card').hide()
+    $('#credit-card').next().hide()
+    $('#credit-card').next().next().hide()
 })()
 
