@@ -3,11 +3,9 @@ const jobRoleChange = (e) => {
     const targetElement = e.target
     // compare target value with String
     if (targetElement.value === 'other') {
-        // create textInput html
-        const textInput = '<br><input name="user_other_title" placeholder="Your job role">'
-        // get the parent of the select field which is fieldset
-        // append the textInput
-        $(targetElement).parent().append(textInput)
+        $('#other-user-title').show()
+    } else {
+        $('#other-user-title').hide()
     }
 }
 
@@ -98,7 +96,7 @@ const checkboxChange = () => {
     const allCheckBoxes = $('input[type=checkbox]')
     // create empty array
     let arrayOfCheckedBoxes = []
-    
+    let price = 0
     // loop over all checkboxes
     allCheckBoxes.each(function(index) {
         // if checkbox is checked
@@ -107,6 +105,23 @@ const checkboxChange = () => {
             arrayOfCheckedBoxes.push($(allCheckBoxes[index]).attr('name'))
         }
     })
+
+    for(let i = 0; i < arrayOfCheckedBoxes.length; i += 1) {
+        if (arrayOfCheckedBoxes[i] === 'all') {
+            price += 200
+        } else {
+            price += 100
+        }
+    }
+    
+    if (price) {
+        const priceShow = $(`<p id="price-show">Total price: ${price}</p>`);
+        $('#price-show').remove()
+        $('.activities').append(priceShow)
+    } else {
+        $('#price-show').remove()
+    }
+
 
     // START: check if name of activity is in arrayOfCheckedBoxes //
     // the inArray method looks if the given value exists in the erray if so it returns it's index
