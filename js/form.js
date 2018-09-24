@@ -3,9 +3,10 @@ const jobRoleChange = (e) => {
     const targetElement = e.target
     // compare target value with String
     if (targetElement.value === 'other') {
-        $('#other-user-title').show()
+        $('#other-title').show()
     } else {
-        $('#other-user-title').hide()
+        $('#other-title').hide()
+        $('#other-title').val('') 
     }
 }
 
@@ -53,6 +54,9 @@ const designChange = (e) => {
 const paymentSelect = (e) => {
     //  get click targets value
     const targetValue       = e.target.value
+    // store al paymeny options
+    const paymentOptions = $('#payment option')
+    console.log(paymentOptions)
     //  store creditcard element
     const $creditCardInfo   = $('#credit-card')
     // store sibeling of creditcard element
@@ -60,14 +64,6 @@ const paymentSelect = (e) => {
     // store the sibeling of the sibeling of creditcard element 
     // (I think it is better to read this than chaining it of from paypalinfo)
     const $btcInfo          = $('#credit-card').next().next()
-    console.log(e.target.value)
-
-    // if this option is selected there is no payment option selected
-    if (targetValue === 'select_method') {
-        $creditCardInfo.hide()
-        $paypalinfo.hide()
-        $btcInfo.hide()
-    }
 
     // show creditcard options nothing else
     if (targetValue === 'credit card') {
@@ -94,7 +90,8 @@ const paymentSelect = (e) => {
 const checkboxChange = () => {
     // get all checkboxes
     const allCheckBoxes = $('input[type=checkbox]')
-    // create empty array
+
+    // create empty array so we can store checkbox name values
     let arrayOfCheckedBoxes = []
     let price = 0
     // loop over all checkboxes
@@ -115,7 +112,7 @@ const checkboxChange = () => {
     }
     
     if (price) {
-        const priceShow = $(`<p id="price-show">Total price: ${price}</p>`);
+        const priceShow = $(`<p id="price-show">Total: $${price}</p>`);
         $('#price-show').remove()
         $('.activities').append(priceShow)
     } else {
@@ -168,6 +165,68 @@ const checkboxChange = () => {
     // END: check if name of activity is in arrayOfCheckedBoxes //
 }
 
+const validateForm = (e) => {
+    e.preventDefault()
+    
+    const user_name = $("input[name~='user_name']").val();
+    const email_address = $("input[name~='user_email']").val();
+    const paymentSelection = $("select[name~='user_payment']").val();
+    const checkedBoxes = $("input[type='checkbox']:checked").length
+
+    if (paymentSelection === 'credit card') {
+        const creditNumber = $("input[name~='user_cc-num']").val()
+        const zipCode = $("input[name~='user_zip']").val()
+        const cvvCode = $("input[name~='user_cvv']").val()
+
+        if (!creditNumber) {
+            // ask user to give cc number
+        } else {
+            // check for valid number
+
+            // between 13 and 16 numbers
+        }
+
+        if (!zipCode) {
+            // ask user for zipcode
+        } else {
+            // check for valid zipcode
+
+            // 5 numbers
+        }
+
+        if (!cvvCode) {
+            // ask user for ccvCode
+        } else {
+            // check for valid ccvCode
+            // 3 numbers
+        }
+    }
+
+    if(!user_name) {
+        e.preventDefault()
+        $("input[name~='user_name']").css({'border': '2px solid #f00'})
+    } else {
+        $("input[name~='user_name']").css({'border': '0px'})
+    }
+
+    if (!email_address) {
+        e.preventDefault()
+        $("input[name~='user_email']").css({'border': '2px solid #f00'})
+    } else {
+        $("input[name~='user_email']").css({'border': '0px'})
+    }
+
+    if (checkedBoxes == 0) {
+        e.preventDefault()
+        $(".activities").css({'border': '2px solid #f00'})
+        // ask user to choose at leas 1 activity
+    } else {
+        $(".activities").css({'border': '0px'})
+    }
+
+    console.log(user_name, email_address, paymentSelection, checkedBoxes)
+}
+
 // We use an IIFE like this at work for a whole JS document so i'd like to use it here as well
 // Only that now I use it for code that needs to be triggered right away
 // https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript
@@ -175,16 +234,15 @@ const checkboxChange = () => {
     // on pageload add focus to the first input element
     $('#name').focus();
     // on pageload set prevent default on form submit
-    $('form').on('submit', (e) => {
-        e.preventDefault();
-    })
+    $('form').on('submit', validateForm)
+
+    $('#other-title').hide()
     // when the job role select changes call jobRoleChange function
     $('#title').on('change', jobRoleChange)
     // when the t-shirt design select changes call designChange function
     $('#design').on('change', designChange)
 
-    // hide all payment options
-    $('#credit-card').hide()
+    // hide all payment options except for the creditcard as that is choosen by default
     $('#credit-card').next().hide()
     $('#credit-card').next().next().hide()
     // when the payment options select changes call paymentSelect function

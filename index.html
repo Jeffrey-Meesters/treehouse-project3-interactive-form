@@ -46,7 +46,7 @@
           I did not want to touch the html 
           but I need to if I want to show this input when there is no JS
         -->
-        <input class="is-hidden" id="other-user-title" name="user_other_title" type="text" placeholder="Your job role">
+        <input id="other-title" name="user_other_title" type="text" placeholder="Your job role">
       </fieldset>
 
       <fieldset class="shirt">
@@ -100,7 +100,13 @@
 
         <label for="payment">I'm going to pay with:</label>
         <select id="payment" name="user_payment">
-          <option value="select_method">Select Payment Method</option>
+          <!-- 
+            to show what i did I just commented out the 'select payment options' 
+            as the use should not be able to choose this anyway AND
+            this way the creditcard options is in view first
+            I added the selected attribute so it is actually selected by default
+          -->
+          <!-- <option value="select_method">Select Payment Method</option> -->
           <option value="credit card">Credit Card</option>
           <option value="paypal">PayPal</option>
           <option value="bitcoin">Bitcoin</option>
