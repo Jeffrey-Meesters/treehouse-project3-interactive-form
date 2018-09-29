@@ -3,9 +3,12 @@ const jobRoleChange = (e) => {
     const targetElement = e.target;
     // compare target value with String
     if (targetElement.value === 'other') {
+        // show 'other' input
         $('#other-title').show();
     } else {
+        // hide 'other' input
         $('#other-title').hide();
+        // empty empty it's value
         $('#other-title').val('');
     }
 };
@@ -15,8 +18,10 @@ const designChange = (e) => {
     const targetElement = e.target;
     // store all possible options
     const options = $('#color option');
-    const placeholderOption = $('#placeholder-option');
-    $(placeholderOption).remove();
+
+    // select the placeholder option and remove it
+    $('#placeholder-option').remove();
+    // show the colors menu
     $('#color').show();
 
     // compare target value with String
@@ -29,9 +34,10 @@ const designChange = (e) => {
                 $(options[0]).attr('selected', true);
                 // set 4th option selection to false so it is not shown
                 $(options[3]).attr('selected', false);
+                // show options 1 to 3
                 $(options[i]).show();
-            // the last 3 are hearts so hide them now
             } else {
+                // the last 3 are hearts so hide them now
                 $(options[i]).hide();
             }
         }
@@ -45,26 +51,34 @@ const designChange = (e) => {
                 $(options[3]).attr('selected', true);
                 // set first option selection to false so it is not shown
                 $(options[0]).attr('selected', false);
+                // show options 4 to 6
                 $(options[i]).show();
-            // the first 3 are puns so hide them now
             } else {
+                // the first 3 are puns so hide them now
                 $(options[i]).hide();
             }
         }
     } else if (targetElement.value === 'Select Theme') {
+        // if the user puts the design selection back on 'Select Theme'
+        //  hide all options
         for(let i = 0; i < options.length; i += 1) {
             $(options[i]).hide();
         }
+        // append the placeholder
         $('#color').append('<option value="" id="placeholder-option" disabled selected>Please select a T-shirt theme</option>');
+        // for exceeds expectations grade hide it
         $('#color').hide();
+
+        // and put the default message back in the color field
+        const colorLabel = $('#color').prev();
+        const colorPlaceHolder = '<div id="placeholder-option" disabled selected>Please select a T-shirt theme</div>';
+        $(colorPlaceHolder).insertAfter(colorLabel);
     }
 };
 
 const paymentSelect = (e) => {
     //  get click targets value
     const targetValue       = e.target.value;
-    // store al paymeny options
-    const paymentOptions    = $('#payment option');
     //  store creditcard element
     const $creditCardInfo   = $('#credit-card');
     // store sibeling of creditcard element
@@ -99,7 +113,7 @@ const checkboxChange = () => {
     // get all checkboxes
     const allCheckBoxes = $('input[type=checkbox]');
 
-    // create empty array so we can store checkbox name values
+    // create empty array so we can store checked checkbox name values
     let arrayOfCheckedBoxes = [];
     let price = 0;
     // loop over all checkboxes
@@ -111,24 +125,32 @@ const checkboxChange = () => {
         }
     });
 
+    // loop over all checked checkboxes
     for(let i = 0; i < arrayOfCheckedBoxes.length; i += 1) {
+        // if the checkbox is 'all' price + 200
         if (arrayOfCheckedBoxes[i] === 'all') {
             price += 200
+        // else price + 100
         } else {
             price += 100
         }
     }
 
+    // if price is not 0
     if (price) {
+        // create an element holding the price value
         const priceShow = $(`<p id="price-show">Total: $${price}</p>`);
+        // remove an existing price-show element
         $('#price-show').remove();
+        // append the new price-show element
         $('.activities').append(priceShow)
     } else {
+        // if price is 0 remove the price-show element
         $('#price-show').remove()
     }
 
 
-    // START: check if name of activity is in arrayOfCheckedBoxes //
+    // START: check if name of activity is in arrayOfCheckedBoxes
     // the inArray method looks if the given value exists in the erray if so it returns it's index
     // else it returns -1, so if the value is bigger than -1 it is in the array
 
@@ -136,40 +158,31 @@ const checkboxChange = () => {
     if ($.inArray('js-frameworks', arrayOfCheckedBoxes) > -1 ) {
 
         // how to select with name values: https://www.w3schools.com/jquery/sel_attribute_contains_value.asp
-        $("input[name~='express']").attr('disabled', true);
         // set the parents (label) class to disabled as I found out that the disabled attribute does not work on labels
-        // I needed to use a class, both disabled states are styled in style.css
-        $("input[name~='express']").parent().attr('class', 'disabled')
+        // so I needed to use a class, both disabled states are styled in style.css
+        $("input[name~='express']").attr('disabled', true).parent().attr('class', 'disabled')
     } else {
-        $("input[name~='express']").attr('disabled', false);
-        $("input[name~='express']").parent().attr('class', '')
+        $("input[name~='express']").attr('disabled', false).parent().attr('class', '')
     }
 
     if ($.inArray('express', arrayOfCheckedBoxes) > -1 ) {
-        $("input[name~='js-frameworks']").attr('disabled', true);
-        $("input[name~='js-frameworks']").parent().attr('class', 'disabled')
+        $("input[name~='js-frameworks']").attr('disabled', true).parent().attr('class', 'disabled')
     } else {
-        $("input[name~='js-frameworks']").attr('disabled', false);
-        $("input[name~='js-frameworks']").parent().attr('class', '')
+        $("input[name~='js-frameworks']").attr('disabled', false).parent().attr('class', '')
     }
 
     // if js-libs then node needs to be disabled and vice versa
     if ($.inArray('js-libs', arrayOfCheckedBoxes) > -1 ) {
-        $("input[name~='node']").attr('disabled', true);
-        $("input[name~='node']").parent().attr('class', 'disabled')
+        $("input[name~='node']").attr('disabled', true).parent().attr('class', 'disabled')
     } else {
-        $("input[name~='node']").attr('disabled', false);
-        $("input[name~='node']").parent().attr('class', '')
+        $("input[name~='node']").attr('disabled', false).parent().attr('class', '')
     }
 
     if ($.inArray('node', arrayOfCheckedBoxes) > -1 ) {
-        $("input[name~='js-libs']").attr('disabled', true);
-        $("input[name~='js-libs']").parent().attr('class', 'disabled')
+        $("input[name~='js-libs']").attr('disabled', true).parent().attr('class', 'disabled')
     } else {
-        $("input[name~='js-libs']").attr('disabled', false);
-        $("input[name~='js-libs']").parent().attr('class', '')
+        $("input[name~='js-libs']").attr('disabled', false).parent().attr('class', '')
     }
-
     // END: check if name of activity is in arrayOfCheckedBoxes //
 };
 
@@ -185,68 +198,96 @@ const validateEmail = (e) => {
 
     // if there is not an error yet AND email addres is incorrect append error
     if(!hasEmailError && !correctEmail) {
+        // if there is an error with this class remove it
+        // e.g.: the user tried to submit an empty mail input then this error class would exist
         $('.email-error-msg').remove();
+        // get the label of mail input which is the previous sibling
         const label = $('#mail').prev();
-        const errorMsg = '<div class="email-error-msg">email-address is not valid yet</div>';
+        // create an error message
+        const errorMsg = '<div class="email-error-msg error-msg">email-address is not valid yet</div>';
+        // inset the error message after the label
         $(errorMsg).insertAfter(label);
+        // set hasEmailerror to true, so next time this part will not run
         hasEmailError = true;
     } 
 
     // if email is correct or empty, remove error
     if (correctEmail || email === '') {
         $('.email-error-msg').remove();
+        // set hasEmailError to false so when the user empties the mail input
+        // validation/appending error message can happen again
         hasEmailError = false; 
     }
 }
 
 const validateForm = (e) => {
-    const user_name = $("input[name~='user_name']").val();
-    const email_address = $("input[name~='user_email']").val();
-    const paymentSelection = $("select[name~='user_payment']").val();
-    const checkedBoxes = $("input[type='checkbox']:checked").length;
+    if (hasEmailError) {
+        e.preventDefault()
+        // nothing else than preventing submission needs to happen
+        // because the validateEmail function has put an error near the field
+        // add this point html5 is ALSO validating the email field
+    }
+    // store elements
+    const user_name = $("input[name~='user_name']");
+    const email_address = $("input[name~='user_email']");
+    const paymentSelection = $("select[name~='user_payment']");
+    const checkedBoxes = $("input[type='checkbox']:checked");
     const errored = $('.error-msg');
 
-    // If there are error existing tags remove them
+    // If there are existing error tags remove them
+    // the rest of this script will restore the error tags if any errors are found
+    // this way the user only sees errors that are after the new form submit
     if (errored) {
         for(let i = 0; i < errored.length; i += 1) {
             errored[i].remove();
         }
     }
 
-    if (paymentSelection === 'credit card') {
-        const creditNumber = $("input[name~='user_cc-num']").val();
-        const zipCode = $("input[name~='user_zip']").val();
-        const cvvCode = $("input[name~='user_cvv']").val();
+    if (paymentSelection.val() === 'credit card') {
+        // store CC elements
+        // store CC values of CC elements
+        const creditNumber = $("input[name~='user_cc-num']");
+        const creditNumValue = $(creditNumber).val();
+        
+        const zipcode = $("input[name~='user_zip']");
+        const zipCodeValue = zipcode.val();
+        
+        const cvvCode = $("input[name~='user_cvv']")
+        const cvvCodeValue = cvvCode.val();
 
-        if (isNaN(creditNumber)) {
+        // isNaN checks if a value is a number or string and returns a boolean
+        if (isNaN(creditNumValue)) {
             e.preventDefault();
-            const label = $("input[name~='user_cc-num']").prev();
+            // get the label of the input which is the previous sibling
+            const label = $(creditNumber).prev();
+            // create an error message
             const errorMsg = '<div class="error-msg">You did not provide a number between 13 and 16 digits</div>';
+            // insert the errormassage after the label
             $(errorMsg).insertAfter(label);
         }
-        if (isNaN(zipCode)) {
+        if (isNaN(zipCodeValue)) {
             e.preventDefault();
-            const label = $("input[name~='user_zip']").prev();
+            const label = $(zipcode).prev();
             const errorMsg = '<div class="error-msg">You did not provide a number of 5 digits</div>';
             $(errorMsg).insertAfter(label);
         }
-        if (isNaN(cvvCode)) {
+        if (isNaN(cvvCodeValue)) {
             e.preventDefault();
-            const label = $("input[name~='user_cvv']").prev();
+            const label = $(cvvCode).prev();
             const errorMsg = '<div class="error-msg">You did not provide a number of 3 digits</div>';
             $(errorMsg).insertAfter(label);
         }
 
-        if (!creditNumber) {
+        if (creditNumValue === '') {
             e.preventDefault();
             // ask user to give cc number
-            const label = $("input[name~='user_cc-num']").prev();
+            const label = $(creditNumber).prev();
             const errorMsg = '<div class="error-msg">Please give your CC number</div>';
             $(errorMsg).insertAfter(label);
         } else {
             // check for valid number
             // between 13 and 16 numbers
-            if (creditNumber.length < 13 && !isNaN(creditNumber) || creditNumber.length > 16 && !isNaN(creditNumber)) {
+            if (creditNumValue.length < 13 && !isNaN(creditNumValue) || creditNumValue.length > 16 && !isNaN(creditNumValue)) {
                 e.preventDefault();
                 const label = $("input[name~='user_cc-num']").prev();
                 const errorMsg = '<div class="error-msg">Must be a number between 13 and 16 digits</div>';
@@ -254,35 +295,35 @@ const validateForm = (e) => {
             }
         }
 
-        if (!zipCode) {
+        if (!zipCodeValue) {
             e.preventDefault();
             // ask user for zipcode
-            const label = $("input[name~='user_zip']").prev();
+            const label = $(zipcode).prev();
             const errorMsg = '<div class="error-msg">Please give your zip code</div>';
             $(errorMsg).insertAfter(label);
         } else {
             // check for valid zipcode
             // 5 numbers
-            if (zipCode.length !== 5 && !isNaN(zipCode)) {
+            if (zipCodeValue.length !== 5 && !isNaN(zipCodeValue)) {
                 e.preventDefault();
-                const label = $("input[name~='user_zip']").prev();
+                const label = $(zipcode).prev();
                 const errorMsg = '<div class="error-msg">Must be a number of 5 digits</div>';
                 $(errorMsg).insertAfter(label);
             }
         }
 
-        if (!cvvCode) {
+        if (!cvvCodeValue) {
             e.preventDefault();
             // ask user for ccvCode
-            const label = $("input[name~='user_cvv']").prev();
+            const label = $(cvvCode).prev();
             const errorMsg = '<div class="error-msg">Please give your CVV</div>';
             $(errorMsg).insertAfter(label);
         } else {
             // check for valid ccvCode
             // 3 numbers
-            if (cvvCode.length !== 3 && !isNaN(cvvCode)) {
+            if (cvvCodeValue.length !== 3 && !isNaN(cvvCodeValue)) {
                 e.preventDefault();
-                const label = $("input[name~='user_cvv']").prev();
+                const label = $(cvvCode).prev();
                 const errorMsg = '<div class="error-msg">Must be a number of 3 digits</div>';
                 $(errorMsg).insertAfter(label);
             }
@@ -290,31 +331,41 @@ const validateForm = (e) => {
     }
 
 
-    if(!user_name) {
+    if(user_name.val() === '') {
         e.preventDefault();
-        $("input[name~='user_name']").css({'border': '2px solid #f00'})
+        const errorCheck = $('.name-error-msg');
+        if (errorCheck.length === 0) {
+            const label = $('#name').prev();
+            const errorMsg = '<div class="name-error-msg error-msg">Please provide your name</div>';
+            $(errorMsg).insertAfter(label);
+        }
     } else {
-        $("input[name~='user_name']").css({'border': '0px'})
+        $('.name-error-msg').remove();
     }
 
-    if (!email_address) {
+    if (email_address.val() === '') {
         e.preventDefault();
         const errorCheck = $('.email-error-msg');
         if (errorCheck.length === 0) {
             const label = $('#mail').prev();
-            const errorMsg = '<div class="email-error-msg">Please provide an email address</div>';
+            const errorMsg = '<div class="email-error-msg error-msg">Please provide an email address</div>';
             $(errorMsg).insertAfter(label);
         }
     } else {
-        $("input[name~='user_email']").css({'border': '0px'})
+        $('.email-error-msg').remove();
     }
 
-    if (checkedBoxes == 0) {
+    if (checkedBoxes.length == 0) {
         e.preventDefault();
-        $(".activities").css({'border': '2px solid #f00'})
         // ask user to choose at leas 1 activity
+        const errorCheck = $('.checkbox-error-msg');
+        if (errorCheck.length === 0) {
+            const legend = $('.activities legend');
+            const errorMsg = '<div class="checkbox-error-msg error-msg">Please choose at least 1 activity</div>';
+            $(errorMsg).insertAfter(legend);
+        }
     } else {
-        $(".activities").css({'border': '0px'})
+        $('.checkbox-error-msg').remove();
     }
 };
 
@@ -334,27 +385,38 @@ const hideColorOptions = () => {
 (function() {
     // on pageload add focus to the first input element
     $('#name').focus();
-    // on pageload set prevent default on form submit
+    // on form submit validate form
     $('form').on('submit', validateForm);
 
+    // on email input validate input
     $('#mail').on('input', validateEmail);
 
+    // hide the 'other' job role input option
     $('#other-title').hide();
     // when the job role select changes call jobRoleChange function
     $('#title').on('change', jobRoleChange);
 
-    // so down here I have a color options hide function for the expectation grade
+    // so down here I have a color OPTIONS hide function for the Meets expectation grade
     // for the exceeds expectations grade however i need to hide it
-    // So I hide it here, but keep the 'old' functionality for to prove it's there
+    // So I hide the options here, but keep the 'old' functionality for to prove it's there (user will probably never see this, because it is hidden)
     $('#color').hide();
-    //Hide color option
+    // get the label which is a sibling of the #color
+    const colorLabel = $('#color').prev();
+    // create an element with text
+    const colorPlaceHolder = '<div id="placeholder-option" disabled selected>Please select a T-shirt theme</div>';
+    // insert it after the label
+    $(colorPlaceHolder).insertAfter(colorLabel);
+
+    //The hide color option for the meets expectations grade
     hideColorOptions();
 
     // when the t-shirt design select changes call designChange function
     $('#design').on('change', designChange);
 
     // hide all payment options except for the creditcard as that is choosen by default
+    // paypal
     $('#credit-card').next().hide();
+    // bitcoin
     $('#credit-card').next().next().hide();
     // when the payment options select changes call paymentSelect function
     $('#payment').on('change', paymentSelect);
