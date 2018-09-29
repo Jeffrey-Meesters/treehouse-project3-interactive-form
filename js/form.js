@@ -17,6 +17,7 @@ const designChange = (e) => {
     const options = $('#color option');
     const placeholderOption = $('#placeholder-option');
     $(placeholderOption).remove();
+    $('#color').show();
 
     // compare target value with String
     if (targetElement.value === 'js puns') {
@@ -55,6 +56,7 @@ const designChange = (e) => {
             $(options[i]).hide();
         }
         $('#color').append('<option value="" id="placeholder-option" disabled selected>Please select a T-shirt theme</option>');
+        $('#color').hide();
     }
 };
 
@@ -171,6 +173,32 @@ const checkboxChange = () => {
     // END: check if name of activity is in arrayOfCheckedBoxes //
 };
 
+// declare hasEmailError variable so it does not reset on function call
+// hasEmailError is also used in form validation
+let hasEmailError;
+const validateEmail = (e) => {
+    const email = e.target.value;
+    // I knew I needed regex so looked up an email format: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript
+    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // test the input format
+    const correctEmail = regex.test(email);
+
+    // if there is not an error yet AND email addres is incorrect append error
+    if(!hasEmailError && !correctEmail) {
+        $('.email-error-msg').remove();
+        const label = $('#mail').prev();
+        const errorMsg = '<div class="email-error-msg">email-address is not valid yet</div>';
+        $(errorMsg).insertAfter(label);
+        hasEmailError = true;
+    } 
+
+    // if email is correct or empty, remove error
+    if (correctEmail || email === '') {
+        $('.email-error-msg').remove();
+        hasEmailError = false; 
+    }
+}
+
 const validateForm = (e) => {
     const user_name = $("input[name~='user_name']").val();
     const email_address = $("input[name~='user_email']").val();
@@ -193,19 +221,19 @@ const validateForm = (e) => {
         if (isNaN(creditNumber)) {
             e.preventDefault();
             const label = $("input[name~='user_cc-num']").prev();
-            const errorMsg = '<div class="error-msg">Must be a number between 13 and 16 digits</div>';
+            const errorMsg = '<div class="error-msg">You did not provide a number between 13 and 16 digits</div>';
             $(errorMsg).insertAfter(label);
         }
         if (isNaN(zipCode)) {
             e.preventDefault();
             const label = $("input[name~='user_zip']").prev();
-            const errorMsg = '<div class="error-msg">Must be a number of 5 digits</div>';
+            const errorMsg = '<div class="error-msg">You did not provide a number of 5 digits</div>';
             $(errorMsg).insertAfter(label);
         }
         if (isNaN(cvvCode)) {
             e.preventDefault();
             const label = $("input[name~='user_cvv']").prev();
-            const errorMsg = '<div class="error-msg">Must be a number of 3 digits</div>';
+            const errorMsg = '<div class="error-msg">You did not provide a number of 3 digits</div>';
             $(errorMsg).insertAfter(label);
         }
 
@@ -218,7 +246,7 @@ const validateForm = (e) => {
         } else {
             // check for valid number
             // between 13 and 16 numbers
-            if (creditNumber.length < 13 || creditNumber.length > 16 ) {
+            if (creditNumber.length < 13 && !isNaN(creditNumber) || creditNumber.length > 16 && !isNaN(creditNumber)) {
                 e.preventDefault();
                 const label = $("input[name~='user_cc-num']").prev();
                 const errorMsg = '<div class="error-msg">Must be a number between 13 and 16 digits</div>';
@@ -235,7 +263,7 @@ const validateForm = (e) => {
         } else {
             // check for valid zipcode
             // 5 numbers
-            if (zipCode.length !== 5 ) {
+            if (zipCode.length !== 5 && !isNaN(zipCode)) {
                 e.preventDefault();
                 const label = $("input[name~='user_zip']").prev();
                 const errorMsg = '<div class="error-msg">Must be a number of 5 digits</div>';
@@ -252,7 +280,7 @@ const validateForm = (e) => {
         } else {
             // check for valid ccvCode
             // 3 numbers
-            if (cvvCode.length !== 3 ) {
+            if (cvvCode.length !== 3 && !isNaN(cvvCode)) {
                 e.preventDefault();
                 const label = $("input[name~='user_cvv']").prev();
                 const errorMsg = '<div class="error-msg">Must be a number of 3 digits</div>';
@@ -271,7 +299,12 @@ const validateForm = (e) => {
 
     if (!email_address) {
         e.preventDefault();
-        $("input[name~='user_email']").css({'border': '2px solid #f00'})
+        const errorCheck = $('.email-error-msg');
+        if (errorCheck.length === 0) {
+            const label = $('#mail').prev();
+            const errorMsg = '<div class="email-error-msg">Please provide an email address</div>';
+            $(errorMsg).insertAfter(label);
+        }
     } else {
         $("input[name~='user_email']").css({'border': '0px'})
     }
@@ -296,7 +329,7 @@ const hideColorOptions = () => {
 }
 
 // We use an IIFE like this at work for a whole JS document so i'd like to use it here as well
-// Only that now I use it for code that needs to be triggered right away
+// Only that now I use it for code that needs to be triggered/set-up right away
 // https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript
 (function() {
     // on pageload add focus to the first input element
@@ -304,14 +337,21 @@ const hideColorOptions = () => {
     // on pageload set prevent default on form submit
     $('form').on('submit', validateForm);
 
+    $('#mail').on('input', validateEmail);
+
     $('#other-title').hide();
     // when the job role select changes call jobRoleChange function
     $('#title').on('change', jobRoleChange);
-    // when the t-shirt design select changes call designChange function
-    $('#design').on('change', designChange);
 
+    // so down here I have a color options hide function for the expectation grade
+    // for the exceeds expectations grade however i need to hide it
+    // So I hide it here, but keep the 'old' functionality for to prove it's there
+    $('#color').hide();
     //Hide color option
     hideColorOptions();
+
+    // when the t-shirt design select changes call designChange function
+    $('#design').on('change', designChange);
 
     // hide all payment options except for the creditcard as that is choosen by default
     $('#credit-card').next().hide();

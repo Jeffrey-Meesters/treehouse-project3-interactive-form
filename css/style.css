@@ -143,6 +143,7 @@ button:hover {
 	margin-top: 1.25em;
 }
 
+.email-error-msg,
 .error-msg {
 	color: #F00;
 	margin-bottom: 10px;
