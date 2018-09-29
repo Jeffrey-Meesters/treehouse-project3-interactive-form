@@ -1,3 +1,5 @@
+// start at the IIFE at the bottom of this file
+
 const jobRoleChange = (e) => {
     // store target element
     const targetElement = e.target;
@@ -379,11 +381,13 @@ const hideColorOptions = () => {
     $('#color').append('<option value="" id="placeholder-option" disabled selected>Please select a T-shirt theme</option>');
 }
 
+// When I was not sure about existing Jquery methods I looked up Jquery documentation
+// If I used something from stack overflow I have mentioned it once near the code I first used it
 // We use an IIFE like this at work for a whole JS document so i'd like to use it here as well
 // Only that now I use it for code that needs to be triggered/set-up right away
 // https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript
 (function() {
-    // on pageload add focus to the first input element
+    // on pageload add focus to the name input element
     $('#name').focus();
     // on form submit validate form
     $('form').on('submit', validateForm);
